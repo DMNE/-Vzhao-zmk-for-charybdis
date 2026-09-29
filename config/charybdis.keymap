@@ -32,13 +32,6 @@
     trigger-period-ms = <16>;
 };
 
-&trackball {
-    automouse-layer = <1>;
-    automouse-layer-timeout-ms = <600>;
-    scroll-layers = <5>; // Скролл шаром теперь на слое 5 (бывший layer_5)            
-    snipe-layers = <3>;
-};
-
 / {
     scroll_vertical_encoder: scroll_vertical_encoder {
         compatible = "zmk,behavior-sensor-rotate";

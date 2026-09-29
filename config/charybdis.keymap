@@ -32,7 +32,7 @@
     trigger-period-ms = <16>;
 };
 
-&hid_trackball_interface {
+&trackball {
     automouse-layer = <1>;
     automouse-layer-timeout-ms = <600>;
     scroll-layers = <5>; // Скролл шаром теперь на слое 5 (бывший layer_5)            

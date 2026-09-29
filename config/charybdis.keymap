@@ -98,14 +98,14 @@
             compatible = "zmk,behavior-macro";
             label = "tog_game_on";
             #binding-cells = <0>;
-            bindings = <&amc AM_OFF &rgb_ug RGB_COLOR_HSB(0,100,50) &to 6>;
+            bindings = <&rgb_ug RGB_COLOR_HSB(0,100,50) &to 6>; // &amc AM_OFF 
         };
 
         tog_game_off: tog_game_off {
             compatible = "zmk,behavior-macro";
             label = "tog_game_off";
             #binding-cells = <0>;
-            bindings = <&amc AM_ON &rgb_ug RGB_EFR &to 0>;
+            bindings = <&rgb_ug RGB_EFR &to 0>; // &amc AM_ON 
         };
 
         To1_macro: To1_macro {

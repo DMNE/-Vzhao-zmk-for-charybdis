@@ -49,7 +49,7 @@
         tap-ms = <100>;
     };
 
-    &trackball_listener {
+    &{/trackball_listener} {
         
         /* Дочерний узел, который активируется на слое скролла */
         scroll_layer {

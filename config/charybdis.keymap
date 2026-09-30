@@ -49,6 +49,22 @@
         tap-ms = <100>;
     };
 
+    &trackball_listener {
+        
+        /* Дочерний узел, который активируется на слое скролла */
+        scroll_layer {
+            layers = <1>; // ⚠️ ЗАМЕНИТЕ на номер вашего слоя прокрутки
+            
+            /* Цепочка процессоров выполняется последовательно: */
+            input-processors = 
+                /* 1. Превращаем движение X/Y шара в сигналы скролла */
+                <&zip_xy_to_scroll_mapper>, 
+                
+                /* 2. Умножаем скорость скролла (например, в 5 раз) */
+                <&zip_scroll_scaler 5 1>; 
+        };
+    };
+
     behaviors {
         ts_snipe: trackball_snipe {
             compatible = "zmk,behavior-pointing-snipe";

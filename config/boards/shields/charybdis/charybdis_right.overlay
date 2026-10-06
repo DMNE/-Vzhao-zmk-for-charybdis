@@ -119,7 +119,7 @@
 
             input-processors =
                 /* 1. Превращаем движение X/Y шара в сигналы скролла */
-                <&zip_xy_to_scroll_mapper>;
+                <&zip_xy_to_scroll_mapper>,
                 /* 2. Умножаем скорость скролла (например, в 5 раз) */
                 <&zip_scroll_scaler 5 1>;
         };

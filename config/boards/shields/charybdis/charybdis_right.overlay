@@ -5,6 +5,8 @@
  */
  
 #include "charybdis.dtsi"
+#include <input/processors.dtsi>
+#include <dt-bindings/zmk/input.h>
 
 &default_transform {
     col-offset = <6>;
@@ -116,9 +118,9 @@
             layers = <1>;
 
             input-processors =
-                /* 1. Превращаем движение X/Y шара в сигналы скролла */,
-                <&zip_xy_to_scroll_mapper>,
-                /* 2. Умножаем скорость скролла (например, в 5 раз) */,
+                /* 1. Превращаем движение X/Y шара в сигналы скролла */
+                <&zip_xy_to_scroll_mapper>;
+                /* 2. Умножаем скорость скролла (например, в 5 раз) */
                 <&zip_scroll_scaler 5 1>;
         };
     };

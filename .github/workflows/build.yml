@@ -1,5 +1,51 @@
+name: Build Charybdis Firmware
+
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Cache West Dependencies
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-zephyr-modules
+        with:
+          path: |
+            ~/.cmake
+            ~/.cache
+            zephyr
+            modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('config/west.yml') }}
+
+      - name: Install West and Dependencies
+        run: |
+          pip3 install west
+          west init -l config
+          west update
+          west zephyr-export
+
+      - name: Build Left Half
+        run: |
+          west build -s zmk/app -b nice_nano -- -DZMK_CONFIG="${{ github.workspace }}/config" -DSHIELD="charybdis_left" -DCONFIG_ZMK_BOARD_COMPAT=y
+
+      - name: Build Right Half (with Studio)
+        run: |
+          west build -p -s zmk/app -b nice_nano -- -DZMK_CONFIG="${{ github.workspace }}/config" -DSHIELD="charybdis_right" -DCONFIG_ZMK_BOARD_COMPAT=y -DCONFIG_ZMK_STUDIO=y
+
+      - name: Copy Artifacts
+        run: |
+          mkdir -p artifacts
+          [ -f build/zephyr/zmk.uf2 ] && cp build/zephyr/zmk.uf2 artifacts/charybdis_right.uf2 || echo "Right firmware missing"
+          # Если левая половина собиралась в ту же папку, переименуем ее на этапе сборки или разнесем папки (для простоты пересоберем)
+          west build -p -s zmk/app -b nice_nano -- -DZMK_CONFIG="${{ github.workspace }}/config" -DSHIELD="charybdis_left" -DCONFIG_ZMK_BOARD_COMPAT=y
+          [ -f build/zephyr/zmk.uf2 ] && cp build/zephyr/zmk.uf2 artifacts/charybdis_left.uf2 || echo "Left firmware missing"
+
+      - name: Upload UF2 Firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: Charybdis_Firmware
+          path: artifacts/*.uf2
